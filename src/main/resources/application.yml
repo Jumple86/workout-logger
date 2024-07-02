@@ -13,3 +13,6 @@ spring:
           time_zone: UTC
 #  jackson:
 #    time-zone: GMT+8
+
+jwt:
+  secret: ZSRbQppuDkEVY66tTUFGhN3dt4swdrHcIOQEeamv2XkauGH1TFdVi0pMxBOxL5e
