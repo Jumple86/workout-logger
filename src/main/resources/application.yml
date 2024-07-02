@@ -15,4 +15,5 @@ spring:
 #    time-zone: GMT+8
 
 jwt:
-  secret: ZSRbQppuDkEVY66tTUFGhN3dt4swdrHcIOQEeamv2XkauGH1TFdVi0pMxBOxL5e
+  secret: IKvcenK3ZwOunElJ3m1hUyLZIzhaJSql
+  valid-time: 30
