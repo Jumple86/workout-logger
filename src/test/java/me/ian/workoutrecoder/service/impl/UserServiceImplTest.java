@@ -35,12 +35,12 @@ class UserServiceImplTest {
     public void givenUserParam_whenDoRegister_thenReturnId() {
         String account = "test";
         String password = "test";
-        String nickName = "test";
+        String nickname = "test";
 
         UserParam userParam = new UserParam();
         userParam.setAccount(account);
         userParam.setPassword(password);
-        userParam.setNickName(nickName);
+        userParam.setNickName(nickname);
 
         String encodedPassword = passwordEncoder.encode(password);
 
@@ -48,7 +48,7 @@ class UserServiceImplTest {
         expectUserPO.setId(1);
         expectUserPO.setAccount("test");
         expectUserPO.setPassword(encodedPassword);
-        expectUserPO.setNickName(nickName);
+        expectUserPO.setNickname(nickname);
 
         when(userRepository.save(any(UserPO.class))).thenReturn(expectUserPO);
         Integer result = userService.register(userParam);
