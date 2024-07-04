@@ -13,8 +13,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "workout_record")
-public class WorkoutRecordPO {
+@Table(name = "workout_log")
+public class WorkoutLogPO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
