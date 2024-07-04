@@ -1,7 +1,7 @@
 package me.ian.workoutrecoder.model.po;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +23,7 @@ public class WorkoutLogPO {
     @Column(name = "action_id")
     private Integer actionId;
     @Column(name = "record_date")
-    private Date recordDate;
+    private LocalDate recordDate;
     @Column(name = "set_no")
     private Integer setNo;
     @Column(name = "times")
