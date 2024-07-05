@@ -16,4 +16,6 @@ spring:
 
 jwt:
   secret: IKvcenK3ZwOunElJ3m1hUyLZIzhaJSql
-  valid-time: 30
+  valid-time:
+    authentication: 30
+    refresh: 43200 # 30days

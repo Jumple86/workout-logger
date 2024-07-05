@@ -1,7 +1,9 @@
 package me.ian.workoutrecoder.service;
 
 public interface JwtService {
-    String createUserLoginToken(String account);
+    String createAuthenticationToken(String subject);
 
+    String createRefreshToken(String subject);
 
+    long getExpiration();
 }

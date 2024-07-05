@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends CrudRepository<UserPO, Integer> {
 
-
+    UserPO findByAccount(String account);
 }

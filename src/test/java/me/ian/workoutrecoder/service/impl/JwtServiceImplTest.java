@@ -12,15 +12,15 @@ class JwtServiceImplTest {
 
     @BeforeEach
     public void setup() {
-        jwtService = new JwtServiceImpl("IKvcenK3ZwOunElJ3m1hUyLZIzhaJSql", 30);
+        jwtService = new JwtServiceImpl("IKvcenK3ZwOunElJ3m1hUyLZIzhaJSql", 30, 43200);
     }
 
     @Test
     public void givenAccount_whenCreateUserLoginToken_thenReturnJwtToken() {
-        String jwtToken = jwtService.createUserLoginToken("account");
-        System.out.println(jwtToken);
+        String jwt = jwtService.createAuthenticationToken("account");
+        System.out.println(jwt);
 
-        assertNotNull(jwtToken);
+        assertNotNull(jwt);
     }
 
 }

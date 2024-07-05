@@ -3,6 +3,7 @@ package me.ian.workoutrecoder.service.impl;
 import me.ian.workoutrecoder.model.param.UserParam;
 import me.ian.workoutrecoder.model.po.UserPO;
 import me.ian.workoutrecoder.repository.UserRepository;
+import me.ian.workoutrecoder.service.JwtService;
 import me.ian.workoutrecoder.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.*;
 class UserServiceImplTest {
     @Mock
     UserRepository userRepository;
+    @Mock
+    JwtService jwtService;
     PasswordEncoder passwordEncoder;
     UserService userService;
     
@@ -28,7 +31,7 @@ class UserServiceImplTest {
     @BeforeEach
     public void setup() {
         this.passwordEncoder = new BCryptPasswordEncoder();
-        this.userService = new UserServiceImpl(userRepository, passwordEncoder);
+        this.userService = new UserServiceImpl(userRepository, passwordEncoder, jwtService);
     }
 
     @Test
@@ -40,7 +43,7 @@ class UserServiceImplTest {
         UserParam userParam = new UserParam();
         userParam.setAccount(account);
         userParam.setPassword(password);
-        userParam.setNickName(nickname);
+        userParam.setNickname(nickname);
 
         String encodedPassword = passwordEncoder.encode(password);
 
