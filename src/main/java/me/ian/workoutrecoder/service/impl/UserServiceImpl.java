@@ -1,6 +1,6 @@
 package me.ian.workoutrecoder.service.impl;
 
-import me.ian.workoutrecoder.enums.ErrorCodeEnum;
+import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 import me.ian.workoutrecoder.exception.RestException;
 import me.ian.workoutrecoder.model.param.UserParam;
 import me.ian.workoutrecoder.model.po.UserPO;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         try {
             userPO = userRepository.save(userPO);
         } catch (DataIntegrityViolationException e) {
-            throw new RestException(ErrorCodeEnum.ACCOUNT_ALREADY_EXIST.getCode(), ErrorCodeEnum.ACCOUNT_ALREADY_EXIST.getMsg());
+            throw new RestException(ApplicationResponseCodeEnum.ACCOUNT_ALREADY_EXIST.getCode(), ApplicationResponseCodeEnum.ACCOUNT_ALREADY_EXIST.getMsg());
         }
 
         return userPO.getId();

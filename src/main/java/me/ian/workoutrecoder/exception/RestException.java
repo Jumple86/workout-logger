@@ -1,7 +1,7 @@
 package me.ian.workoutrecoder.exception;
 
 import lombok.Data;
-import me.ian.workoutrecoder.enums.ErrorCodeEnum;
+import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 
 @Data
 public class RestException extends RuntimeException{
@@ -20,6 +20,6 @@ public class RestException extends RuntimeException{
     }
 
     public RestException(Integer code) {
-        this(code, ErrorCodeEnum.getMsgByCode(code));
+        this(code, ApplicationResponseCodeEnum.getMsgByCode(code));
     }
 }
