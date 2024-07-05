@@ -12,8 +12,8 @@ public class UserPO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "nick_name")
-    private String nickName;
+    @Column(name = "nickname")
+    private String nickname;
     @Column(name = "account")
     private String account;
     @Column(name = "password")

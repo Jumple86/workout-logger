@@ -10,9 +10,9 @@ import org.hibernate.validator.constraints.Length;
 public class UserParam {
     @NotEmpty
     @Length(max = 16, message = "暱稱不得超過 {max} 個字")
-    @JsonAlias("nick_name")
-    @JsonProperty("nickName")
-    private String nickName;
+    @JsonAlias("nickname")
+    @JsonProperty("nickname")
+    private String nickname;
     @NotEmpty
     @Length(min = 8, max = 30, message = "帳號長度須介於 {min} 到 {max} 之間")
     @JsonProperty("account")
