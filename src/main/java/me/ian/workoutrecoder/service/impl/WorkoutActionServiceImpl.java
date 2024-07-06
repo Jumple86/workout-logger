@@ -1,6 +1,6 @@
 package me.ian.workoutrecoder.service.impl;
 
-import me.ian.workoutrecoder.enums.ErrorCodeEnum;
+import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 import me.ian.workoutrecoder.exception.RestException;
 import me.ian.workoutrecoder.model.param.CreateWorkoutActionParam;
 import me.ian.workoutrecoder.model.param.ModifyWorkoutActionParam;
@@ -36,7 +36,7 @@ public class WorkoutActionServiceImpl implements WorkoutActionService {
         try {
             po = workoutActionRepository.save(po);
         } catch (DataIntegrityViolationException e) {
-            throw new RestException(ErrorCodeEnum.ACTION_ALREADY_EXIST.getCode());
+            throw new RestException(ApplicationResponseCodeEnum.ACTION_ALREADY_EXIST.getCode());
         }
 
         return po.getId();
@@ -71,7 +71,7 @@ public class WorkoutActionServiceImpl implements WorkoutActionService {
 
     @Override
     public GetWorkoutActionDetailVO getWorkoutActionDetail(Integer actionId) {
-        WorkoutActionPO workoutActionPO = workoutActionRepository.findById(actionId).orElseThrow(() -> new RestException(ErrorCodeEnum.DATA_NOT_EXIST.getCode()));
+        WorkoutActionPO workoutActionPO = workoutActionRepository.findById(actionId).orElseThrow(() -> new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode()));
 
         GetWorkoutActionDetailVO vo = new GetWorkoutActionDetailVO();
         vo.setId(workoutActionPO.getId());

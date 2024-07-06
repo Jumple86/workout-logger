@@ -2,7 +2,9 @@ package me.ian.workoutrecoder.controller;
 
 import jakarta.validation.Valid;
 import me.ian.workoutrecoder.controller.common.RestResponse;
+import me.ian.workoutrecoder.model.param.UserLoginParam;
 import me.ian.workoutrecoder.model.param.UserParam;
+import me.ian.workoutrecoder.model.vo.UserLoginVO;
 import me.ian.workoutrecoder.service.UserService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,5 +26,10 @@ public class UserController {
     @PostMapping
     public RestResponse register(@RequestBody @Valid UserParam param) {
         return new RestResponse<>(userService.register(param));
+    }
+
+    @PostMapping("/login")
+    public RestResponse<UserLoginVO> login(@RequestBody @Valid UserLoginParam param) {
+        return new RestResponse<>(userService.login(param));
     }
 }

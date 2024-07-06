@@ -2,7 +2,7 @@ package me.ian.workoutrecoder.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import me.ian.workoutrecoder.controller.common.RestResponse;
-import me.ian.workoutrecoder.enums.ErrorCodeEnum;
+import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -23,13 +23,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestResponse handleParamException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
-        return new RestResponse(ErrorCodeEnum.PARAMETER_WRONG.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
+        return new RestResponse(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestResponse handleMissingParameterException(MissingServletRequestParameterException e) {
-        return new RestResponse(ErrorCodeEnum.PARAMETER_WRONG.getCode(), e.getMessage());
+        return new RestResponse(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode(), e.getMessage());
     }
 
 
