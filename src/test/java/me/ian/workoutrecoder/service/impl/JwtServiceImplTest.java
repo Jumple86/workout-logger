@@ -12,7 +12,7 @@ class JwtServiceImplTest {
 
     @BeforeEach
     public void setup() {
-        jwtService = new JwtServiceImpl("IKvcenK3ZwOunElJ3m1hUyLZIzhaJSql", 30, 43200);
+        jwtService = new JwtServiceImpl("testtesttesttesttesttesttesttest", 1, 43200);
     }
 
     @Test

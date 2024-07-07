@@ -1,5 +1,6 @@
 package me.ian.workoutrecoder.service.impl;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import me.ian.workoutrecoder.service.JwtService;
@@ -63,5 +64,14 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public long getExpiration() {
         return this.AUTHENTICATION_VALID_SECONDS;
+    }
+
+    @Override
+    public Claims parseToken(String jwt) {
+        return Jwts.parserBuilder()
+                .setSigningKey(this.getSigningKey())
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
     }
 }

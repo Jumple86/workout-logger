@@ -11,6 +11,7 @@ public enum ApplicationResponseCodeEnum {
     ACTION_ALREADY_EXIST(10004, "Action is already exist"),
     USER_NOT_EXIST(10005, "User is not exist, please register"),
     PASSWORD_WRONG(10006, "Password is wrong"),
+    AUTHENTICATE_FAILED(10007, "Authentication illegal"),
     DATA_NOT_EXIST(11000, "Data not exist")
     ;
 
