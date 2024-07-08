@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import me.ian.workoutrecoder.controller.common.RestResponse;
 import me.ian.workoutrecoder.model.param.CreateWorkoutLogParam;
 import me.ian.workoutrecoder.service.WorkoutLogService;
@@ -18,9 +17,12 @@ import me.ian.workoutrecoder.service.WorkoutLogService;
 @Validated
 @RestController
 @RequestMapping("/workout/log")
-@AllArgsConstructor
 public class WorkoutLogController {
     private final WorkoutLogService workoutLogService;
+
+    public WorkoutLogController(WorkoutLogService workoutLogService) {
+        this.workoutLogService = workoutLogService;
+    }
 
     @PostMapping
     public RestResponse<Integer> createWorkoutLog(
