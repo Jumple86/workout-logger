@@ -3,6 +3,7 @@ package me.ian.workoutrecoder.exception;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.log4j.Log4j2;
 import me.ian.workoutrecoder.controller.common.RestResponse;
 import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.security.sasl.AuthenticationException;
 
 
+@Log4j2
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -49,6 +51,7 @@ public class GlobalExceptionHandler {
     })
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public RestResponse handleAuthorizationException(Exception e) {
+        log.error("Handle error {} \n{}", e.getClass(), e.getMessage());
         return new RestResponse(ApplicationResponseCodeEnum.AUTHENTICATE_FAILED.getCode(), e.getMessage());
     }
 }
