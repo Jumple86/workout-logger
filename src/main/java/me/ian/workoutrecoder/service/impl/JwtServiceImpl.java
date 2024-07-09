@@ -26,7 +26,7 @@ public class JwtServiceImpl implements JwtService {
                           @Value("${jwt.valid-time.refresh}") long refreshTokenValidSecond) {
         this.SECRET_KEY = secret;
         this.AUTHENTICATION_VALID_SECONDS = Duration.ofMinutes(validTime).toSeconds();
-        this.REFRESH_TOKEN_VALID_SECOND = refreshTokenValidSecond;
+        this.REFRESH_TOKEN_VALID_SECOND = Duration.ofMinutes(refreshTokenValidSecond).toSeconds();
     }
     @Override
     public String createAuthenticationToken(String subject) {
