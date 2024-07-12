@@ -2,16 +2,19 @@ package me.ian.workoutrecoder.controller;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import me.ian.workoutrecoder.controller.common.RestResponse;
 import me.ian.workoutrecoder.model.param.CreateWorkoutLogParam;
+import me.ian.workoutrecoder.model.vo.GetWorkLogDetailVO;
 import me.ian.workoutrecoder.service.WorkoutLogService;
 
 @Validated
@@ -29,6 +32,12 @@ public class WorkoutLogController {
             @RequestHeader(name = "X-User-Id") Integer userId,
             @RequestBody @Valid CreateWorkoutLogParam param) {
         return new RestResponse<>(workoutLogService.createNewWorkoutLog(userId, param));
+    }
+
+    @GetMapping
+    public RestResponse<GetWorkLogDetailVO> getWorkoutLogList(@RequestHeader(name = "X-User-Id") Integer userId,
+            @RequestParam(name = "actionId") Integer actionId) {
+        return new RestResponse<>(workoutLogService.getWorkoutLogList(userId, actionId));
     }
 
     @DeleteMapping("/{id}")
