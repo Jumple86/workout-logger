@@ -12,6 +12,8 @@ public enum ApplicationResponseCodeEnum {
     USER_NOT_EXIST(10005, "User is not exist, please register"),
     PASSWORD_WRONG(10006, "Password is wrong"),
     AUTHENTICATE_FAILED(10007, "Authentication illegal"),
+    ALREADY_CREATED_WEEKLY_MENU(10008, "Already created weekly menu"),
+    MENU_ALREADY_EXIST(10009, "Menu is already exist"),
     DATA_NOT_EXIST(11000, "Data not exist")
     ;
 
