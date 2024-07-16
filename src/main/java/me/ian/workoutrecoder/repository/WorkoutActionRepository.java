@@ -1,6 +1,8 @@
 package me.ian.workoutrecoder.repository;
 
 import me.ian.workoutrecoder.model.po.WorkoutActionPO;
+import me.ian.workoutrecoder.repository.specs.WorkoutActionSpecs;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +23,30 @@ public interface WorkoutActionRepository extends CrudRepository<WorkoutActionPO,
     @Modifying
     @Transactional
     int updateById(@Param("id") Integer id, @Param("parts") String parts, @Param("name") String name, @Param("description") String description);
+
+    default List<WorkoutActionPO> findBySpecification(Integer userId, String parts, String name) {
+        Specification<WorkoutActionPO> specification = Specification.where(null);
+
+        if (userId != null) {
+            specification = specification.and(WorkoutActionSpecs.userIdEquals(userId));
+        }
+
+        if (parts != null) {
+            specification = specification.and(WorkoutActionSpecs.partsEquals(parts));
+        }
+
+        if (name != null) {
+            specification = specification.and(WorkoutActionSpecs.nameEquals(name));
+        }
+
+        return findAll(specification);
+    }
+
+    default List<WorkoutActionPO> findByPartsIn(Integer userId, List<String> parts) {
+        Specification specification = WorkoutActionSpecs.userIdEquals(userId);
+        specification = specification.and(WorkoutActionSpecs.partsIn(parts));
+
+        return findAll(specification);
+    }
 
 }
