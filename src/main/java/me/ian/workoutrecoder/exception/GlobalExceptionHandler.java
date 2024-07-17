@@ -32,9 +32,12 @@ public class GlobalExceptionHandler {
         return new RestResponse(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ExceptionHandler({
+            MissingServletRequestParameterException.class,
+            MissingRequestHeaderException.class
+    })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RestResponse handleMissingParameterException(MissingServletRequestParameterException e) {
+    public RestResponse handleMissingParameterException(Exception e) {
         return new RestResponse(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode(), e.getMessage());
     }
 

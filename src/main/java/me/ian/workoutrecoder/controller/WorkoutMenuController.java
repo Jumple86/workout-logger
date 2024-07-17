@@ -3,8 +3,11 @@ package me.ian.workoutrecoder.controller;
 import jakarta.validation.Valid;
 import me.ian.workoutrecoder.controller.common.RestResponse;
 import me.ian.workoutrecoder.model.param.CreateWorkoutMenuParam;
+import me.ian.workoutrecoder.model.vo.GetWorkoutMenuListVO;
 import me.ian.workoutrecoder.service.WorkoutMenuService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/workout/menu")
@@ -19,5 +22,11 @@ public class WorkoutMenuController {
     public RestResponse<Integer> createMenu(@RequestHeader(name = "X-User-Id") Integer userId,
                                             @RequestBody @Valid CreateWorkoutMenuParam param) {
         return new RestResponse<>(workoutMenuService.createWorkoutMenu(userId, param));
+    }
+
+    @GetMapping
+    public RestResponse<List<GetWorkoutMenuListVO>> getMenuList(@RequestHeader(name = "X-User-Id") Integer userId) {
+
+        return new RestResponse<>(workoutMenuService.getWorkoutMenuList(userId));
     }
 }
