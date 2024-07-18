@@ -1,20 +1,21 @@
 package me.ian.workoutrecoder.repository;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import me.ian.workoutrecoder.model.po.WorkoutActionPO;
 import me.ian.workoutrecoder.model.po.WorkoutLogPO;
 
 @Repository
 public interface WorkoutLogRepository
         extends CrudRepository<WorkoutLogPO, Integer>, JpaSpecificationExecutor<WorkoutLogPO> {
 
-    @Query("SELECT DISTINCT(pa.name) FROM WorkoutLogPO po JOIN WorkoutActionPO pa ON po.actionId = pa.id WHERE po.actionId = :actionId")
-    Optional<String> getWorkoutActionName(@Param("actionId") Integer actionId);
+    List<WorkoutLogPO> findByActionIdAndRecordDate(WorkoutActionPO actionId, LocalDate recordDate);
+
+    List<WorkoutLogPO> findByRecordDate(LocalDate recordDate);
 
 }

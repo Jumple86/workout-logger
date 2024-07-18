@@ -1,5 +1,7 @@
 package me.ian.workoutrecoder.controller;
 
+import java.util.List;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,9 +37,10 @@ public class WorkoutLogController {
     }
 
     @GetMapping
-    public RestResponse<GetWorkLogDetailVO> getWorkoutLogList(@RequestHeader(name = "X-User-Id") Integer userId,
-            @RequestParam(name = "actionId") Integer actionId) {
-        return new RestResponse<>(workoutLogService.getWorkoutLogList(userId, actionId));
+    public RestResponse<List<GetWorkLogDetailVO>> getWorkoutLogList(@RequestHeader(name = "X-User-Id") Integer userId,
+            @RequestParam(name = "actionId", required = false) Integer actionId,
+            @RequestParam(name = "recordDate") String recordDate) {
+        return new RestResponse<>(workoutLogService.getWorkoutLogList(userId, actionId, recordDate));
     }
 
     @DeleteMapping("/{id}")
