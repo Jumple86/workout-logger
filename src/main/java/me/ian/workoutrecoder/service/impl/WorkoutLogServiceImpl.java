@@ -43,9 +43,9 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
     @Override
     public List<GetWorkLogDetailVO> getWorkoutLogList(Integer userId, Integer actionId, String recordDate) {
         LocalDate rDate = LocalDate.parse(recordDate);
-        WorkoutActionPO actionPO = new WorkoutActionPO();
         List<WorkoutLogPO> workoutLogPOs;
         if (actionId != null) {
+            WorkoutActionPO actionPO = new WorkoutActionPO();
             actionPO.setId(actionId);
             workoutLogPOs = workoutLogRepository.findByActionIdAndRecordDate(actionPO, rDate);
         } else {
