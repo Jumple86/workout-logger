@@ -8,10 +8,8 @@ import me.ian.workoutrecoder.model.po.WorkoutActionPO;
 import me.ian.workoutrecoder.model.vo.GetWorkoutActionDetailVO;
 import me.ian.workoutrecoder.model.vo.GetWorkoutActionListVO;
 import me.ian.workoutrecoder.repository.WorkoutActionRepository;
-import me.ian.workoutrecoder.repository.specs.WorkoutActionSpecs;
 import me.ian.workoutrecoder.service.WorkoutActionService;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,11 +42,7 @@ public class WorkoutActionServiceImpl implements WorkoutActionService {
 
     @Override
     public GetWorkoutActionListVO getWorkoutActions(Integer userId, String parts) {
-        Specification specification = WorkoutActionSpecs.userIdEquals(userId);
-        if (parts != null) {
-            specification = specification.and(WorkoutActionSpecs.partsEquals(parts));
-        }
-        List<WorkoutActionPO> workoutActionPOs = workoutActionRepository.findAll(specification);
+        List<WorkoutActionPO> workoutActionPOs = workoutActionRepository.findBySpecification(userId, parts, null);
         List<GetWorkoutActionListVO.WorkoutAction> workoutActions = workoutActionPOs.stream()
                 .map(po -> new GetWorkoutActionListVO.WorkoutAction(po.getId(), po.getParts(), po.getName(), po.getCreateAt().toLocalDateTime(), po.getUpdateAt().toLocalDateTime()))
                 .collect(Collectors.toList());
@@ -58,10 +52,7 @@ public class WorkoutActionServiceImpl implements WorkoutActionService {
 
     @Override
     public GetWorkoutActionListVO getWorkoutActionsWithMultipleParts(Integer userId, List<String> parts) {
-        Specification specification = WorkoutActionSpecs.userIdEquals(userId);
-        specification = specification.and(WorkoutActionSpecs.partsIn(parts));
-
-        List<WorkoutActionPO> workoutActionPOs = workoutActionRepository.findAll(specification);
+        List<WorkoutActionPO> workoutActionPOs = workoutActionRepository.findByPartsIn(userId, parts);
         List<GetWorkoutActionListVO.WorkoutAction> workoutActions = workoutActionPOs.stream()
                 .map(po -> new GetWorkoutActionListVO.WorkoutAction(po.getId(), po.getParts(), po.getName(), po.getCreateAt().toLocalDateTime(), po.getUpdateAt().toLocalDateTime()))
                 .collect(Collectors.toList());
@@ -93,7 +84,6 @@ public class WorkoutActionServiceImpl implements WorkoutActionService {
         workoutActionPO.setDescription(param.getDescription());
 
         int result = workoutActionRepository.update(workoutActionPO);
-//        int result = workoutActionRepository.updateById(param.getId(), param.getParts(), param.getName(), param.getDescription());
         return result > 0;
     }
 
