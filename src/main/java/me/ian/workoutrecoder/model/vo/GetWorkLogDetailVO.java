@@ -15,7 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetWorkLogDetailVO {
 
-    @JsonProperty("actionName")
+    @JsonProperty("action_id")
+    private Integer id;
+    @JsonProperty("action_name")
     private String name;
     @JsonProperty("capacity")
     private Double capacity;
@@ -26,14 +28,14 @@ public class GetWorkLogDetailVO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class WorkoutLog {
-        @JsonProperty("record_date")
-        private LocalDate recordDate;
-        @JsonProperty("set_no")
-        private Integer setNo;
+        @JsonProperty("log_id")
+        private Integer id;
         @JsonProperty("times")
         private Integer times;
         @JsonProperty("weight")
         private Double weight;
+        @JsonProperty("record_date")
+        private LocalDate recordDate;
         @JsonProperty("create_at")
         private LocalDateTime createAt;
         @JsonProperty("update_at")
