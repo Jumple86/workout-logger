@@ -12,4 +12,6 @@ public interface WorkoutMenuService {
     List<GetWorkoutMenuListVO> getWorkoutMenuList(Integer userId);
 
     boolean editWorkoutMenu(Integer menuId, Integer userId, EditWorkoutMenuParam param);
+
+    boolean deleteWorkoutMenu(Integer userId, Integer menuId);
 }

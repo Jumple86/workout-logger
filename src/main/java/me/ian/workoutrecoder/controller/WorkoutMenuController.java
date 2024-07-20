@@ -36,4 +36,10 @@ public class WorkoutMenuController {
                                                  @RequestBody @Valid EditWorkoutMenuParam param) {
         return new RestResponse<>(workoutMenuService.editWorkoutMenu(menuId, userId, param));
     }
+
+    @DeleteMapping("/{menuId}")
+    public RestResponse<Boolean> deleteWorkoutMenu(@RequestHeader(name = "X-User-Id") Integer userId,
+                                                   @PathVariable("menuId") Integer menuId) {
+        return new RestResponse<>(workoutMenuService.deleteWorkoutMenu(userId, menuId));
+    }
 }

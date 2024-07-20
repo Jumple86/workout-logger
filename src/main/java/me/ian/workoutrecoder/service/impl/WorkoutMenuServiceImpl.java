@@ -112,4 +112,14 @@ public class WorkoutMenuServiceImpl implements WorkoutMenuService {
         }
         return false;
     }
+
+    @Override
+    public boolean deleteWorkoutMenu(Integer userId, Integer menuId) {
+        try {
+            workoutMenuRepository.deleteById(menuId);
+            return true;
+        } catch (Exception e) {
+            throw new RestException(ApplicationResponseCodeEnum.SYSTEM_ERROR.getCode());
+        }
+    }
 }
