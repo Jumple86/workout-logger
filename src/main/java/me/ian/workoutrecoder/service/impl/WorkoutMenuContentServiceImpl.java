@@ -68,13 +68,6 @@ public class WorkoutMenuContentServiceImpl implements WorkoutMenuContentService 
         return workoutActionPO.getUserId().equals(userId);
     }
 
-    private void checkMenuIsWeekly(Integer menuId) {
-        WorkoutMenuPO workoutMenuPO = workoutMenuRepository.findById(menuId).orElseThrow(() -> new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode()));
-        if (!workoutMenuPO.getType().equals(MenuTypeEnum.WEEKLY.getCode())) {
-            throw new RestException(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode(), "Not weekly menu");
-        }
-    }
-
     private void checkMenuType(Integer menuId, Predicate<WorkoutMenuPO> predicate) {
         WorkoutMenuPO workoutMenuPO = workoutMenuRepository.findById(menuId).orElseThrow(() -> new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode()));
         if (!predicate.test(workoutMenuPO)) {
