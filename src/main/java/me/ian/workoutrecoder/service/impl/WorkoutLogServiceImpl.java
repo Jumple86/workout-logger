@@ -54,21 +54,21 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
 
         List<String> actionName = workoutLogPOs.stream().map(p -> p.getActionId().getName()).distinct()
                 .collect(Collectors.toList());
+        List<Integer> getActionId = workoutLogPOs.stream().mapToInt(p -> p.getActionId().getId()).distinct().boxed()
+                .collect(Collectors.toList());
 
         List<GetWorkLogDetailVO> result = new ArrayList<>();
         for (int i = 0; i < actionName.size(); i++) {
             String actionNameStr = actionName.get(i);
             Double capacity = workoutLogPOs.stream().filter(p -> p.getActionId().getName().equals(actionNameStr))
-                    .mapToDouble(p -> p.getSetNo() * p.getTimes() * p.getWeight())
-                    .sum();
+                    .mapToDouble(p -> p.getTimes() * p.getWeight()).sum();
             List<GetWorkLogDetailVO.WorkoutLog> workoutLogs = workoutLogPOs.stream()
                     .filter(p -> p.getActionId().getName().equals(actionNameStr))
                     .map(po -> new GetWorkLogDetailVO.WorkoutLog(
-                            po.getRecordDate(), po.getSetNo(),
-                            po.getTimes(), po.getWeight(),
+                            po.getId(), po.getTimes(), po.getWeight(), po.getRecordDate(),
                             po.getCreateAt().toLocalDateTime(), po.getUpdateAt().toLocalDateTime()))
                     .collect(Collectors.toList());
-            result.add(new GetWorkLogDetailVO(actionNameStr, capacity, workoutLogs));
+            result.add(new GetWorkLogDetailVO(getActionId.get(i), actionNameStr, capacity, workoutLogs));
         }
         return result;
     }
