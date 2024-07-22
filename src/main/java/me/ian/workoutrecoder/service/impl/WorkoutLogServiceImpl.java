@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -80,9 +81,22 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
 
     @Override
     public Boolean modifyWorkoutLog(Integer userId, Integer actionId, List<ModifyWorkoutLogParam> param) {
+        Set<String> uniqueDates = param.stream()
+                .map(ModifyWorkoutLogParam::getRecordDate)
+                .collect(Collectors.toSet());
+        if (uniqueDates.size() > 1) {
+            throw new RestException(ApplicationResponseCodeEnum.DATE_NOT_SAME.getCode());
+        }
+        long distinctSetCount = param.stream()
+                .mapToInt(ModifyWorkoutLogParam::getSetNo)
+                .distinct()
+                .count();
+        if (distinctSetCount != param.size()) {
+            throw new RestException(ApplicationResponseCodeEnum.SET_NO_NOT_SAME.getCode());
+        }
+        WorkoutLogPO po = new WorkoutLogPO();
         List<WorkoutLogPO> workoutLogPOs = new ArrayList<>();
         for (ModifyWorkoutLogParam p : param) {
-            WorkoutLogPO po = new WorkoutLogPO();
             if (!workoutLogRepository.findById(p.getId()).isPresent()) {
                 throw new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode());
             }

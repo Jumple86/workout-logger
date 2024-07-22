@@ -14,9 +14,9 @@ public enum ApplicationResponseCodeEnum {
     AUTHENTICATE_FAILED(10007, "Authentication illegal"),
     ALREADY_CREATED_WEEKLY_MENU(10008, "Already created weekly menu"),
     MENU_ALREADY_EXIST(10009, "Menu is already exist"),
-    DATA_NOT_EXIST(11000, "Data not exist")
-    ;
-
+    DATA_NOT_EXIST(11000, "Data not exist"),
+    DATE_NOT_SAME(11001, "Record Date not same"),
+    SET_NO_NOT_SAME(11002, "Set no can not same");
 
     private int code;
     private String msg;
