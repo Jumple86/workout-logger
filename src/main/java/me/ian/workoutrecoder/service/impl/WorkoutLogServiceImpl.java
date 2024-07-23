@@ -94,9 +94,9 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
         if (distinctSetCount != param.size()) {
             throw new RestException(ApplicationResponseCodeEnum.SET_NO_NOT_SAME.getCode());
         }
-        WorkoutLogPO po = new WorkoutLogPO();
         List<WorkoutLogPO> workoutLogPOs = new ArrayList<>();
         for (ModifyWorkoutLogParam p : param) {
+            WorkoutLogPO po = new WorkoutLogPO();
             if (!workoutLogRepository.findById(p.getId()).isPresent()) {
                 throw new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode());
             }
