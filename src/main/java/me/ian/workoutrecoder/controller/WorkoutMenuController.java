@@ -2,12 +2,12 @@ package me.ian.workoutrecoder.controller;
 
 import jakarta.validation.Valid;
 import me.ian.workoutrecoder.controller.common.RestResponse;
+import me.ian.workoutrecoder.enums.WeekDayEnum;
 import me.ian.workoutrecoder.model.param.AddWorkoutMenuContentParam;
 import me.ian.workoutrecoder.model.param.CreateWorkoutMenuParam;
 import me.ian.workoutrecoder.model.param.EditWorkoutMenuParam;
 import me.ian.workoutrecoder.model.vo.GetWorkoutMenuListVO;
 import me.ian.workoutrecoder.service.WorkoutMenuFacade;
-import me.ian.workoutrecoder.service.WorkoutMenuService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,5 +50,13 @@ public class WorkoutMenuController {
                                                        @PathVariable("menuId") Integer menuId,
                                                        @RequestBody @Valid AddWorkoutMenuContentParam param) {
         return new RestResponse<>(workoutMenuFacade.addMenuContent(userId, menuId, param));
+    }
+
+    @DeleteMapping("/{menuId}/action/{actionId}")
+    public RestResponse<Boolean> deleteWorkoutMenuContent(@RequestHeader(name = "X-User-Id") Integer userId,
+                                                          @PathVariable("menuId") Integer menuId,
+                                                          @PathVariable("actionId") Integer actionId,
+                                                          @RequestParam(value = "day", required = false)WeekDayEnum day) {
+        return new RestResponse<>(workoutMenuFacade.deleteMenuContent(menuId, actionId, day));
     }
 }

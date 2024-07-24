@@ -1,5 +1,6 @@
 package me.ian.workoutrecoder.service;
 
+import me.ian.workoutrecoder.enums.WeekDayEnum;
 import me.ian.workoutrecoder.model.param.AddWorkoutMenuContentParam;
 import me.ian.workoutrecoder.model.param.CreateWorkoutMenuParam;
 import me.ian.workoutrecoder.model.param.EditWorkoutMenuParam;
@@ -17,4 +18,6 @@ public interface WorkoutMenuFacade {
     boolean deleteWorkoutMenu(Integer userId, Integer menuId);
 
     boolean addMenuContent(Integer userId, Integer menuId, AddWorkoutMenuContentParam param);
+
+    boolean deleteMenuContent(Integer menuId, Integer actionId, WeekDayEnum day);
 }
