@@ -8,6 +8,7 @@ import me.ian.workoutrecoder.controller.common.RestResponse;
 import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,17 +23,17 @@ import javax.security.sasl.AuthenticationException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({
-            HttpMessageNotReadableException.class,
             MethodArgumentNotValidException.class,
             ConstraintViolationException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RestResponse handleParamException(MethodArgumentNotValidException e) {
+    public RestResponse handleParamException(BindException e) {
         BindingResult bindingResult = e.getBindingResult();
         return new RestResponse(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode(), bindingResult.getAllErrors().get(0).getDefaultMessage());
     }
 
     @ExceptionHandler({
+            HttpMessageNotReadableException.class,
             MissingServletRequestParameterException.class,
             MissingRequestHeaderException.class
     })
