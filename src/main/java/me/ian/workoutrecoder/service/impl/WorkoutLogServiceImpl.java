@@ -81,7 +81,7 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
 
     @Override
     public Boolean modifyWorkoutLog(Integer userId, Integer actionId, List<ModifyWorkoutLogParam> param) {
-        Set<String> uniqueDates = param.stream()
+        Set<LocalDate> uniqueDates = param.stream()
                 .map(ModifyWorkoutLogParam::getRecordDate)
                 .collect(Collectors.toSet());
         if (uniqueDates.size() > 1) {
@@ -94,12 +94,20 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
         if (distinctSetCount != param.size()) {
             throw new RestException(ApplicationResponseCodeEnum.SET_NO_NOT_SAME.getCode());
         }
+
+        WorkoutActionPO actionPO = new WorkoutActionPO();
+        actionPO.setId(actionId);
+        LocalDate rData = uniqueDates.iterator().next();
+        List<Integer> getids = workoutLogRepository.findByActionIdAndRecordDate(actionPO, rData).stream()
+                .map(id -> id.getId()).collect(Collectors.toList());
+        List<Integer> ids = param.stream().map(ModifyWorkoutLogParam::getId).collect(Collectors.toList());
+        if (!ids.equals(getids)) {
+            throw new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode());
+        }
+
         List<WorkoutLogPO> workoutLogPOs = new ArrayList<>();
         for (ModifyWorkoutLogParam p : param) {
             WorkoutLogPO po = new WorkoutLogPO();
-            if (!workoutLogRepository.findById(p.getId()).isPresent()) {
-                throw new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode());
-            }
             po.setId(p.getId());
             UserPO userPO = new UserPO();
             userPO.setId(userId);
@@ -107,7 +115,7 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
             WorkoutActionPO workoutActionPO = new WorkoutActionPO();
             workoutActionPO.setId(actionId);
             po.setActionId(workoutActionPO);
-            po.setRecordDate(LocalDate.parse(p.getRecordDate()));
+            po.setRecordDate(p.getRecordDate());
             po.setSetNo(p.getSetNo());
             po.setTimes(p.getTimes());
             po.setWeight(p.getWeight());

@@ -1,8 +1,9 @@
 package me.ian.workoutrecoder.model.param;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -12,9 +13,9 @@ public class ModifyWorkoutLogParam {
     @NotNull
     @JsonProperty("log_id")
     private Integer id;
-    @NotBlank
+    @NotNull
     @JsonProperty("record_date")
-    private String recordDate;
+    private LocalDate recordDate;
     @NotNull
     @JsonProperty("set_no")
     private Integer setNo;
