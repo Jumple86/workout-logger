@@ -2,6 +2,7 @@ package me.ian.workoutrecoder.service.impl;
 
 import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 import me.ian.workoutrecoder.enums.MenuTypeEnum;
+import me.ian.workoutrecoder.enums.WeekDayEnum;
 import me.ian.workoutrecoder.exception.RestException;
 import me.ian.workoutrecoder.model.param.AddWorkoutMenuContentParam;
 import me.ian.workoutrecoder.model.po.WorkoutActionPO;
@@ -12,6 +13,7 @@ import me.ian.workoutrecoder.repository.WorkoutMenuContentRepository;
 import me.ian.workoutrecoder.repository.WorkoutMenuRepository;
 import me.ian.workoutrecoder.service.WorkoutMenuContentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Predicate;
 
@@ -73,5 +75,17 @@ public class WorkoutMenuContentServiceImpl implements WorkoutMenuContentService 
         if (!predicate.test(workoutMenuPO)) {
             throw new RestException(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode(), "Menu type wrong");
         }
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteMenuContent(Integer menuId, Integer actionId, WeekDayEnum day) {
+        if (day != null) {
+            this.checkMenuType(menuId, po -> po.getType().equals(MenuTypeEnum.WEEKLY.getCode()));
+        } else {
+            this.checkMenuType(menuId, po -> po.getType().equals(MenuTypeEnum.CUSTOM.getCode()));
+        }
+
+        return workoutMenuContentRepository.deleteBySpecification(menuId, actionId, day) > 0;
     }
 }
