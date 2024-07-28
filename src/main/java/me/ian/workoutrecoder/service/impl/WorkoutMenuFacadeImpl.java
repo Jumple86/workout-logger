@@ -4,6 +4,7 @@ import me.ian.workoutrecoder.enums.WeekDayEnum;
 import me.ian.workoutrecoder.model.param.AddWorkoutMenuContentParam;
 import me.ian.workoutrecoder.model.param.CreateWorkoutMenuParam;
 import me.ian.workoutrecoder.model.param.EditWorkoutMenuParam;
+import me.ian.workoutrecoder.model.vo.GetWorkoutMenuDetailVO;
 import me.ian.workoutrecoder.model.vo.GetWorkoutMenuListVO;
 import me.ian.workoutrecoder.service.WorkoutMenuContentService;
 import me.ian.workoutrecoder.service.WorkoutMenuFacade;
@@ -40,6 +41,11 @@ public class WorkoutMenuFacadeImpl implements WorkoutMenuFacade {
     @Override
     public boolean deleteWorkoutMenu(Integer userId, Integer menuId) {
         return workoutMenuService.deleteWorkoutMenu(userId, menuId);
+    }
+
+    @Override
+    public GetWorkoutMenuDetailVO getWorkoutMenuDetail(Integer userId, Integer menuId) {
+        return workoutMenuService.getWorkoutMenuDetail(userId, menuId);
     }
 
     @Override

@@ -6,6 +6,7 @@ import me.ian.workoutrecoder.enums.WeekDayEnum;
 import me.ian.workoutrecoder.model.param.AddWorkoutMenuContentParam;
 import me.ian.workoutrecoder.model.param.CreateWorkoutMenuParam;
 import me.ian.workoutrecoder.model.param.EditWorkoutMenuParam;
+import me.ian.workoutrecoder.model.vo.GetWorkoutMenuDetailVO;
 import me.ian.workoutrecoder.model.vo.GetWorkoutMenuListVO;
 import me.ian.workoutrecoder.service.WorkoutMenuFacade;
 import org.springframework.web.bind.annotation.*;
@@ -58,5 +59,11 @@ public class WorkoutMenuController {
                                                           @PathVariable("actionId") Integer actionId,
                                                           @RequestParam(value = "day", required = false)WeekDayEnum day) {
         return new RestResponse<>(workoutMenuFacade.deleteMenuContent(menuId, actionId, day));
+    }
+
+    @GetMapping("/{menuId}")
+    public RestResponse<GetWorkoutMenuDetailVO> getWorkoutMenuDetail(@RequestHeader(name = "X-User-Id") Integer userId,
+                                                                     @PathVariable("menuId") Integer menuId) {
+        return new RestResponse<>(workoutMenuFacade.getWorkoutMenuDetail(userId, menuId));
     }
 }
