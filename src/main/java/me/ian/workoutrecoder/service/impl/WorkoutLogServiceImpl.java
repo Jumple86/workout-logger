@@ -1,13 +1,19 @@
 package me.ian.workoutrecoder.service.impl;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
+import me.ian.workoutrecoder.exception.RestException;
 import me.ian.workoutrecoder.model.param.CreateWorkoutLogParam;
+import me.ian.workoutrecoder.model.param.ModifyWorkoutLogParam;
 import me.ian.workoutrecoder.model.po.UserPO;
 import me.ian.workoutrecoder.model.po.WorkoutActionPO;
 import me.ian.workoutrecoder.model.po.WorkoutLogPO;
@@ -71,6 +77,53 @@ public class WorkoutLogServiceImpl implements WorkoutLogService {
             result.add(new GetWorkLogDetailVO(getActionId.get(i), actionNameStr, capacity, workoutLogs));
         }
         return result;
+    }
+
+    @Override
+    public Boolean modifyWorkoutLog(Integer userId, Integer actionId, List<ModifyWorkoutLogParam> param) {
+        Set<LocalDate> uniqueDates = param.stream()
+                .map(ModifyWorkoutLogParam::getRecordDate)
+                .collect(Collectors.toSet());
+        if (uniqueDates.size() > 1) {
+            throw new RestException(ApplicationResponseCodeEnum.DATE_NOT_SAME.getCode());
+        }
+        long distinctSetCount = param.stream()
+                .mapToInt(ModifyWorkoutLogParam::getSetNo)
+                .distinct()
+                .count();
+        if (distinctSetCount != param.size()) {
+            throw new RestException(ApplicationResponseCodeEnum.SET_NO_NOT_SAME.getCode());
+        }
+
+        WorkoutActionPO actionPO = new WorkoutActionPO();
+        actionPO.setId(actionId);
+        LocalDate rData = uniqueDates.iterator().next();
+        List<Integer> getids = workoutLogRepository.findByActionIdAndRecordDate(actionPO, rData).stream()
+                .map(id -> id.getId()).collect(Collectors.toList());
+        List<Integer> ids = param.stream().map(ModifyWorkoutLogParam::getId).collect(Collectors.toList());
+        if (!ids.equals(getids)) {
+            throw new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode());
+        }
+
+        List<WorkoutLogPO> workoutLogPOs = new ArrayList<>();
+        for (ModifyWorkoutLogParam p : param) {
+            WorkoutLogPO po = new WorkoutLogPO();
+            po.setId(p.getId());
+            UserPO userPO = new UserPO();
+            userPO.setId(userId);
+            po.setUserId(userPO);
+            WorkoutActionPO workoutActionPO = new WorkoutActionPO();
+            workoutActionPO.setId(actionId);
+            po.setActionId(workoutActionPO);
+            po.setRecordDate(p.getRecordDate());
+            po.setSetNo(p.getSetNo());
+            po.setTimes(p.getTimes());
+            po.setWeight(p.getWeight());
+            po.setUpdateAt(Timestamp.valueOf(LocalDateTime.now()));
+            workoutLogPOs.add(po);
+        }
+        workoutLogRepository.saveAll(workoutLogPOs);
+        return true;
     }
 
     @Override
