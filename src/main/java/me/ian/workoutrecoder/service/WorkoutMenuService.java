@@ -2,6 +2,7 @@ package me.ian.workoutrecoder.service;
 
 import me.ian.workoutrecoder.model.param.CreateWorkoutMenuParam;
 import me.ian.workoutrecoder.model.param.EditWorkoutMenuParam;
+import me.ian.workoutrecoder.model.vo.GetWorkoutMenuDetailVO;
 import me.ian.workoutrecoder.model.vo.GetWorkoutMenuListVO;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface WorkoutMenuService {
     boolean editWorkoutMenu(Integer menuId, Integer userId, EditWorkoutMenuParam param);
 
     boolean deleteWorkoutMenu(Integer userId, Integer menuId);
+
+    GetWorkoutMenuDetailVO getWorkoutMenuDetail(Integer userId, Integer menuId);
 }

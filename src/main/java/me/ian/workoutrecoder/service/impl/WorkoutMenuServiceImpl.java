@@ -2,19 +2,27 @@ package me.ian.workoutrecoder.service.impl;
 
 import me.ian.workoutrecoder.enums.ApplicationResponseCodeEnum;
 import me.ian.workoutrecoder.enums.MenuTypeEnum;
+import me.ian.workoutrecoder.enums.WeekDayEnum;
 import me.ian.workoutrecoder.exception.RestException;
 import me.ian.workoutrecoder.model.param.CreateWorkoutMenuParam;
 import me.ian.workoutrecoder.model.param.EditWorkoutMenuParam;
 import me.ian.workoutrecoder.model.po.UserPO;
+import me.ian.workoutrecoder.model.po.WorkoutMenuContentPO;
 import me.ian.workoutrecoder.model.po.WorkoutMenuPO;
+import me.ian.workoutrecoder.model.vo.CustomWorkoutMenuVO;
+import me.ian.workoutrecoder.model.vo.GetWorkoutMenuDetailVO;
 import me.ian.workoutrecoder.model.vo.GetWorkoutMenuListVO;
+import me.ian.workoutrecoder.model.vo.WeeklyWorkoutMenuVO;
 import me.ian.workoutrecoder.repository.WorkoutMenuRepository;
 import me.ian.workoutrecoder.service.WorkoutMenuService;
 import me.ian.workoutrecoder.util.BeanConvertUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -121,5 +129,54 @@ public class WorkoutMenuServiceImpl implements WorkoutMenuService {
         } catch (Exception e) {
             throw new RestException(ApplicationResponseCodeEnum.SYSTEM_ERROR.getCode());
         }
+    }
+
+    @Override
+    public GetWorkoutMenuDetailVO getWorkoutMenuDetail(Integer userId, Integer menuId) {
+        Optional<WorkoutMenuPO> menuOpt = workoutMenuRepository.findById(menuId);
+        if (menuOpt.isEmpty()) {
+            throw new RestException(ApplicationResponseCodeEnum.DATA_NOT_EXIST.getCode());
+        }
+        WorkoutMenuPO workoutMenuPO = menuOpt.get();
+
+        if (MenuTypeEnum.CUSTOM.getCode() == workoutMenuPO.getType()) {
+            CustomWorkoutMenuVO customWorkoutMenuVO = new CustomWorkoutMenuVO();
+
+            customWorkoutMenuVO.setName(workoutMenuPO.getName());
+            List<GetWorkoutMenuDetailVO.WorkoutMenuContent> actions = this.convert2MenuContent(workoutMenuPO.getMenuContent());
+            customWorkoutMenuVO.setActions(actions);
+
+            return customWorkoutMenuVO;
+        }
+
+        if (MenuTypeEnum.WEEKLY.getCode() == workoutMenuPO.getType()) {
+            WeeklyWorkoutMenuVO weeklyWorkoutMenuVO = new WeeklyWorkoutMenuVO();
+            Map<WeekDayEnum, List<WorkoutMenuContentPO>> dayMenuContents = workoutMenuPO.getMenuContent().stream()
+                    .collect(Collectors.groupingBy(WorkoutMenuContentPO::getDay));
+
+            weeklyWorkoutMenuVO.setMonday(this.convert2MenuContent(dayMenuContents.getOrDefault(WeekDayEnum.MON, new ArrayList<>())));
+            weeklyWorkoutMenuVO.setTuesday(this.convert2MenuContent(dayMenuContents.getOrDefault(WeekDayEnum.TUE, new ArrayList<>())));
+            weeklyWorkoutMenuVO.setWednesday(this.convert2MenuContent(dayMenuContents.getOrDefault(WeekDayEnum.WED, new ArrayList<>())));
+            weeklyWorkoutMenuVO.setThursday(this.convert2MenuContent(dayMenuContents.getOrDefault(WeekDayEnum.THU, new ArrayList<>())));
+            weeklyWorkoutMenuVO.setFriday(this.convert2MenuContent(dayMenuContents.getOrDefault(WeekDayEnum.FRI, new ArrayList<>())));
+            weeklyWorkoutMenuVO.setSaturday(this.convert2MenuContent(dayMenuContents.getOrDefault(WeekDayEnum.SAT, new ArrayList<>())));
+            weeklyWorkoutMenuVO.setSunday(this.convert2MenuContent(dayMenuContents.getOrDefault(WeekDayEnum.SUN, new ArrayList<>())));
+
+            return weeklyWorkoutMenuVO;
+        }
+        throw new RestException(ApplicationResponseCodeEnum.PARAMETER_WRONG.getCode());
+    }
+
+    private List<GetWorkoutMenuDetailVO.WorkoutMenuContent> convert2MenuContent(List<WorkoutMenuContentPO> workoutMenuContents) {
+        return workoutMenuContents.stream()
+                .map(workoutMenuContentPO -> {
+                    GetWorkoutMenuDetailVO.WorkoutMenuContent menuContent = new GetWorkoutMenuDetailVO.WorkoutMenuContent();
+                    menuContent.setActionName(workoutMenuContentPO.getActionId().getName());
+                    menuContent.setSet(workoutMenuContentPO.getSet());
+                    menuContent.setWeight(workoutMenuContentPO.getWeight());
+
+                    return menuContent;
+                })
+                .toList();
     }
 }
